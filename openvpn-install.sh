@@ -172,7 +172,7 @@ else
 	read -p "IP address: " -e -i $IP IP
 	echo ""
 	echo "What port do you want for OpenVPN?"
-	read -p "Port: " -e -i 1194 PORT
+	read -p "Port: " -e -i 443 PORT
 	echo ""
 	echo "What DNS do you want to use with the VPN?"
 	echo "   1) Current system resolvers"
@@ -220,7 +220,7 @@ else
 	cp pki/ca.crt pki/private/ca.key pki/dh.pem pki/issued/server.crt pki/private/server.key /etc/openvpn
 	# Generate server.conf
 	echo "port $PORT
-proto udp
+proto tcp
 dev tun
 ca ca.crt
 cert server.crt
@@ -334,7 +334,8 @@ crl-verify /etc/openvpn/easy-rsa/pki/crl.pem" >> /etc/openvpn/server.conf
 	# client-common.txt is created so we have a template to add further users later
 	echo "client
 dev tun
-proto udp
+proto tcp
+http-proxy cacheserv.univ-lille1.fr 3128 auto
 remote $IP $PORT
 resolv-retry infinite
 nobind
